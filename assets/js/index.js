@@ -44,6 +44,8 @@ form.addEventListener("submit", function (e) {
         checkedTech
     };
 
+    alert("Data berhasil di tambahkan!");
+
     console.log(ProjectData);
 
     form.reset();
