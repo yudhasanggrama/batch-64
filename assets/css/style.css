@@ -150,10 +150,30 @@ nav {
 }
 
 .card-img-top {
-    border-radius: 10px;
+    border-radius: 30px;
+    padding: 15px;
 }
 
+.text {
+    text-align: justify;
+}
 
+.card-button {
+    align-items: last baseline;
+}
+
+.tech-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    font-size: 18px;
+}
+
+.tech-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
 
 
 
