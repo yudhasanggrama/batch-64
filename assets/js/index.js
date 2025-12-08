@@ -165,7 +165,7 @@ function updateProject(e) {
 // fungsi menampilkan ke halaman 
 function renderProjects() {
     cardContainer.innerHTML = "";
-    // perulangan untuk menambahkan tampilan card di html setiap submit
+    // perulangan untuk menambahkan tampilan card di html setiap submit dengan menggunakan map
         projects.map((item) => {
         cardContainer.innerHTML += `
         <div class="col-md-4 mt-4 d-flex justify-content-center">
