@@ -152,7 +152,8 @@ function updateProject(e) {
     // membersihkan semua input di modal
     modalForm.reset();
 
-    // menandakan tidak ada project yang sedang di edit mode add kembali
+    // menandakan tidak ada project yang sedang di edit
+    // untuk mengubah nilai global editId seletelah update selesai
     editId = null;
 
     // menutup modal bs setelah update selesai
