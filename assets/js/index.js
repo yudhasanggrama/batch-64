@@ -90,12 +90,13 @@ function addProject(e) {
 
 }
 
-// function editProject
+// function editProject untuk menampilkan value yang ada di modal htmlnya
 function editProject(id) {
     editId = id;
     const data = projects.find(item => item.id === id);
 
-    const modal = document.getElementById("projectModal"); // pastikan modal punya id ini
+    // pastikan modal punya id ini
+    const modal = document.getElementById("projectModal"); 
 
     modal.querySelector("#project").value = data.project;
     modal.querySelector("#start").value = data.start;
@@ -107,36 +108,54 @@ function editProject(id) {
     });
 }
 
-function updateProject(e) {
-    e.preventDefault();
 
+// function update atau merubah data untuk disimpan di localstorage
+function updateProject(e) {
+    // mencegah form melakukan reload saat tombol submit di tekan
+    e.preventDefault();
+    // membuat object dan menyimpan untuk bisa mengganti data yang benar di setiap arraynya
     const update = {
         id: editId,
-        project: modalForm.querySelector("#project").value,
+        project: modalForm.querySelector("#project").value, // mengambil value input dari modal untuk masing-masing 
         start: modalForm.querySelector("#start").value,
         end: modalForm.querySelector("#end").value,
         description: modalForm.querySelector("#description").value,
-        checkedTech: Array.from(modalForm.querySelectorAll("input.tech:checked")).map(el => el.id),
-        year: new Date(modalForm.querySelector("#start").value).getFullYear(),
+        checkedTech: Array.from(modalForm.querySelectorAll("input.tech:checked")).map(el => el.id), //mengambil semua checkbox yang di centang lalu mengubah array berisi id checkbox
+        year: new Date(modalForm.querySelector("#start").value).getFullYear(), //mengambil tahun dari tanggal start
+        // menghitung durasi project dalam bulan
         monthDuration: (() => {
             const startDate = new Date(modalForm.querySelector("#start").value);
             const endDate = new Date(modalForm.querySelector("#end").value);
             return (endDate.getFullYear() - startDate.getFullYear()) * 12 + (endDate.getMonth() - startDate.getMonth());
         })(),
+        // pengecekan kondisi jika user mengupload gambar maka gambar akan berganti, jika tidak akan menggunakan gambar yang lama
         imageURL: modalForm.querySelector("#img").files[0]
             ? URL.createObjectURL(modalForm.querySelector("#img").files[0])
             : projects.find(p => p.id === editId).imageURL 
     };
 
+    // fungsi ini untuk mencari index project di array projects berdasarkan edit id
     function useProjectUpdate(data) {
         const index = data.findIndex(item => item.id === editId);
-        if (index !== -1) data[index] = update;
+        // jika project ditemukan, data lama akan di ganti
+        // index mulai mengecek dari index 0 jika di bawah itu makan hasilnya -1 (atau tidak ada)
+        // secara otomatis ini bisa dibilang bahwa Kalau elemen ditemukan di array
+        if (index !== -1) {
+            // akan melakukan update
+            data[index] = update;
+        }
     }
 
+    // menjalankan HOF dan callback
     callFunction(useProjectUpdate);
+    
+    // membersihkan semua input di modal
     modalForm.reset();
+
+    // menandakan tidak ada project yang sedang di edit mode add kembali
     editId = null;
 
+    // menutup modal bs setelah update selesai
     const bsModal = bootstrap.Modal.getInstance(document.getElementById("projectModal"));
     bsModal.hide();
 }
@@ -183,18 +202,30 @@ function generateTechIcons(techs) {
 }
 
 // =========== DELETE PROJECT =====================
+
+// menggunakan HOF
 function handleDelete(id, onAfterDelete) {
+    // membuat array baru dengan elemen yang memenuhi kondisi yaitu mengambil semua project kecuali yang idnya sama dengan parameter id
+    // sehingga project dengan di tertentu akan di hapus
     projects = projects.filter(item => item.id !== id);
+
+    // menyimpan array projects yang sudah di perbaharui ke localstorage
     saveProjects();
 
+    // mengecek apakah parameter onAfterDelete adalah fungsi
+    // jika benar, fungsi ini akan dipanggil untuk merender ulang UI 
     if (typeof onAfterDelete === "function") {
         onAfterDelete();
     }
 }
 
+// fungsi ini dipanggil ketika user klik tombol delete dengan id project yang ingin dihapus
 const deleteProject = (id) => {
+    // memanggil dengan callback
     handleDelete(id, function () {
+        // memperbaharui tampilan halaman agar project yang dihapus hilang dari layar
         renderProjects();
+        // memberikan notifikasi pop up bawah data berhasil dihapus
         alert("Project berhasil dihapus!");
     });
 }
@@ -203,6 +234,7 @@ const deleteProject = (id) => {
 // Pasang event listener submit
 form.addEventListener("submit", addProject);
 
+// pasang event listener submit dengan function updateProject
 modalForm.addEventListener("submit", updateProject);
 
 
