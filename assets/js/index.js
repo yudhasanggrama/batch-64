@@ -1,6 +1,7 @@
 // Ambil data dari localStorage atau buat array kosong
 let projects = JSON.parse(localStorage.getItem("projects")) || [];
 let userId = parseInt(localStorage.getItem("userId")) || 1;
+// menandakan bahwa tidak ada project yang sedan di edit
 let editId = null;
 
 // Elemen HTML
@@ -207,7 +208,7 @@ function generateTechIcons(techs) {
 // menggunakan HOF
 function handleDelete(id, onAfterDelete) {
     // membuat array baru dengan elemen yang memenuhi kondisi yaitu mengambil semua project kecuali yang idnya sama dengan parameter id
-    // sehingga project dengan di tertentu akan di hapus
+    // sehingga project dengan id tertentu akan di hapus
     projects = projects.filter(item => item.id !== id);
 
     // menyimpan array projects yang sudah di perbaharui ke localstorage
@@ -237,5 +238,3 @@ form.addEventListener("submit", addProject);
 
 // pasang event listener submit dengan function updateProject
 modalForm.addEventListener("submit", updateProject);
-
-
